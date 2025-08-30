@@ -7,7 +7,6 @@ BASEDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 # --- 1. INSTALAÇÃO DE PACOTES ---
 echo "Instalando pacotes essenciais via Pacman..."
-# Adicionamos 'kvantum' à lista
 sudo pacman -S --noconfirm git fastfetch imagemagick chafa ttf-jetbrains-mono-nerd kvantum
 
 echo "Verificando e instalando Yay (para pacotes do AUR)..."
@@ -26,19 +25,23 @@ fi
 echo "Instalando pacotes do AUR com Yay..."
 yay -S --noconfirm oh-my-posh-bin
 
-# --- 2. INSTALAÇÃO DO TEMA OTTO ---
-echo "Instalando o tema 'otto' para o KDE..."
-if [ -d "/tmp/otto" ]; then
-    rm -rf /tmp/otto
+# --- 2. INSTALAÇÃO DO TEMA DRACULA (MODIFICADO) ---
+echo "Instalando o tema 'Dracula' para o KDE..."
+if [ -d "/tmp/dracula-kde" ]; then
+    rm -rf /tmp/dracula-kde
 fi
-git clone https://www.opencode.net/jomada/otto.git /tmp/otto
+git clone https://github.com/dracula/kde.git /tmp/dracula-kde
 # Criando todas as pastas necessárias para temas do Plasma
 mkdir -p ~/.local/share/aurorae/themes/ ~/.local/share/color-schemes/ ~/.local/share/plasma/desktoptheme/ ~/.local/share/plasma/look-and-feel/
-cp -r /tmp/otto/aurorae/* ~/.local/share/aurorae/themes/
-cp -r /tmp/otto/color-schemes/* ~/.local/share/color-schemes/
-cp -r /tmp/otto/plasma/* ~/.local/share/plasma/desktoptheme/
-cp -r /tmp/otto/look-and-feel/* ~/.local/share/plasma/look-and-feel/
-echo "Tema 'otto' instalado."
+# O tema Dracula tem uma estrutura de pastas um pouco diferente, vamos copiar corretamente
+cp -r /tmp/dracula-kde/aurorae/* ~/.local/share/aurorae/themes/
+cp -r /tmp/dracula-kde/color-schemes/* ~/.local/share/color-schemes/
+cp -r /tmp/dracula-kde/plasma/* ~/.local/share/plasma/desktoptheme/
+cp -r /tmp/dracula-kde/look-and-feel/* ~/.local/share/plasma/look-and-feel/
+# O tema Dracula também vem com temas para Kvantum e Konsole, vamos aproveitar!
+cp -r /tmp/dracula-kde/Kvantum/* ~/.config/Kvantum/
+cp -r /tmp/dracula-kde/konsole/* ~/.local/share/konsole/
+echo "Tema 'Dracula' instalado."
 
 # --- 3. CRIAÇÃO DOS LINKS SIMBÓLICOS (A MÁGICA) ---
 echo "Criando links simbólicos para os arquivos de configuração..."
@@ -48,7 +51,7 @@ ln -sfv "$BASEDIR/.bashrc" ~
 ln -sfv "$BASEDIR/.local/share/konsole" ~/.local/share/
 ln -sfv "$BASEDIR/.config/fastfetch" ~/.config/
 
-# KDE e Kvantum (NOVAS LINHAS)
+# KDE e Kvantum
 ln -sfv "$BASEDIR/.config/Kvantum" ~/.config/
 ln -sfv "$BASEDIR/.config/kdeglobals" ~/.config/
 ln -sfv "$BASEDIR/.config/kwinrc" ~/.config/
@@ -57,7 +60,6 @@ ln -sfv "$BASEDIR/.config/kwinrc" ~/.config/
 echo "Copiando imagens de personalização..."
 mkdir -p ~/Imagens/Fotos_terminal
 cp -v "$BASEDIR/imagens/astolfo.png" ~/Imagens/Fotos_terminal/
-# Se tiver outras imagens (ex: papel de parede do Konsole), adicione comandos 'cp' para elas aqui
 
 # --- FINALIZAÇÃO ---
 echo ""
@@ -68,5 +70,5 @@ echo "  todas as alterações visuais do KDE sejam aplicadas."
 echo ""
 echo "  Se o tema não carregar 100%, vá em"
 echo "  'Configurações do Sistema > Aparência > Temas Globais'"
-echo "  e selecione 'look-and-feel-otto' e aplique."
+echo "  e selecione 'Dracula' e aplique."
 echo "-----------------------------------------------------------"
